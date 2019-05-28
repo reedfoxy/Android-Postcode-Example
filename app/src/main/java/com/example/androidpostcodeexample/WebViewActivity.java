@@ -29,12 +29,11 @@ public class WebViewActivity extends AppCompatActivity {
     @SuppressLint("SetJavaScriptEnabled")
     public void init_webView(){
         webView = findViewById(R.id.web);
-        webView.getSettings().setJavaScriptEnabled(true); //javascript 허용
-        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true); // window.open 허용
+        webView.getSettings().setJavaScriptEnabled(true); //javascript
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true); // window.open
         webView.addJavascriptInterface(new AndroidBridge(), "android");
         webView.setWebChromeClient(new WebChromeClient());
 
-        // assets 안에 있는 index.html 을 반드시 웹 상에서 구현하여 아래 에 URL 을 삽입 해야함
         webView.loadUrl("file:///android_asset/www/index.html");
 
     }
