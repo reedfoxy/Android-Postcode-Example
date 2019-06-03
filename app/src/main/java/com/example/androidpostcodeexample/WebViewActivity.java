@@ -1,6 +1,7 @@
 package com.example.androidpostcodeexample;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -15,12 +16,10 @@ public class WebViewActivity extends AppCompatActivity {
     private WebView webView;
     private Handler handler;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
-
 
         init_webView();
         handler = new Handler();
@@ -34,18 +33,25 @@ public class WebViewActivity extends AppCompatActivity {
         webView.addJavascriptInterface(new AndroidBridge(), "android");
         webView.setWebChromeClient(new WebChromeClient());
 
-        webView.loadUrl("file:///android_asset/www/index.html");
+        //(assets / www / index.html) to the web server and fetch the address of the corresponding web server.
+        //(assets/www/index.html) 에 있는 파일을 웹 서버에 올려서 해당 웹서버의 주소를 가져 온다. 로컬에서는 동작하지 않으므로 반드시 웹에 올려서 테스트를 한다..
+        webView.loadUrl("https://URL.html");
 
     }
 
-    private class AndroidBridge {
+    private class AndroidBridge{
         @JavascriptInterface
         public void setAddress(final String arg1, final String arg2, final String arg3) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     Log.d("Args", "arg1 : " + arg1 + ", arg2 : " + arg2 + ", arg3 : " + arg3);
-                    init_webView();
+                    Intent intent = new Intent();
+                    intent.putExtra("arg1",arg1);
+                    intent.putExtra("arg2",arg2);
+                    intent.putExtra("arg3",arg3);
+                    setResult(RESULT_OK,intent);
+                    finish();
                 }
             });
         }
